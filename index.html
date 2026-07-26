@@ -88,8 +88,8 @@
   .boom text{font-size:15px;font-weight:900;letter-spacing:.06em;fill:#fff;text-anchor:middle}
   .ycsq text{font-size:15px;font-weight:900;letter-spacing:.03em;fill:#fff;text-anchor:middle}
   @media (prefers-reduced-motion: no-preference){
-    .times-note{animation:noteblink 1.2s ease-in-out .6s 3}
-    @keyframes noteblink{0%,100%{opacity:1}50%{opacity:.15}}
+    .times-note{animation:noteblink 1.2s ease-in-out .6s 3;transform-origin:left center}
+    @keyframes noteblink{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.15;transform:scale(1.08)}}
   }
 
   @media (prefers-reduced-motion: no-preference){
