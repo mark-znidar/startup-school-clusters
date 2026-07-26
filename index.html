@@ -86,9 +86,10 @@
   .furniture text{font-size:9px;fill:var(--muted)}
   .arena-label{font-size:11px;font-weight:700;letter-spacing:.14em;fill:var(--ink)}
   .boom text{font-size:15px;font-weight:900;letter-spacing:.06em;fill:#fff;text-anchor:middle}
+  .ycsq text{font-size:15px;font-weight:900;letter-spacing:.03em;fill:#fff;text-anchor:middle}
   @media (prefers-reduced-motion: no-preference){
-    .boom{animation:boomblink 1.2s ease-in-out .8s 3}
-    @keyframes boomblink{0%,100%{opacity:1}50%{opacity:.15}}
+    .times-note{animation:noteblink 1.2s ease-in-out .6s 3}
+    @keyframes noteblink{0%,100%{opacity:1}50%{opacity:.15}}
   }
 
   @media (prefers-reduced-motion: no-preference){
@@ -215,10 +216,15 @@
       <text x="247" y="427">BOOM</text>
     </g>
 
+    <g class="ycsq" aria-hidden="true">
+      <rect x="186" y="189" width="54" height="54" rx="10" fill="#F26522"/>
+      <text x="213" y="222">YC</text>
+    </g>
+
     <g class="zone" data-c="ai" role="button" tabindex="0" aria-expanded="false" aria-label="AI infra &amp; developer tools" style="--d:0ms">
-      <circle cx="150" cy="150" r="58" fill="#F26522"/>
-      <text class="zname lg zc" x="150" y="146">AI Infra &amp;<tspan x="150" dy="14">Dev Tools</tspan></text>
-      <text class="zplus zc" x="150" y="182">+</text>
+      <circle cx="140" cy="145" r="56" fill="#F26522"/>
+      <text class="zname lg zc" x="140" y="141">AI Infra &amp;<tspan x="140" dy="14">Dev Tools</tspan></text>
+      <text class="zplus zc" x="140" y="177">+</text>
     </g>
     <g class="zone" data-c="reg" role="button" tabindex="0" aria-expanded="false" aria-label="AI in regulated industries" style="--d:40ms">
       <circle cx="300" cy="150" r="44" fill="#8B6FC0"/>
@@ -236,9 +242,9 @@
       <text class="zplus zc" x="330" y="280">+</text>
     </g>
     <g class="zone" data-c="vert" role="button" tabindex="0" aria-expanded="false" aria-label="Vertical AI for unsexy industries" style="--d:160ms">
-      <circle cx="195" cy="290" r="46" fill="#E0A32E"/>
-      <text class="zname zi" x="195" y="293">Unsexy AI</text>
-      <text class="zplus zi" x="195" y="310">+</text>
+      <circle cx="195" cy="296" r="46" fill="#E0A32E"/>
+      <text class="zname zi" x="195" y="299">Unsexy AI</text>
+      <text class="zplus zi" x="195" y="316">+</text>
     </g>
     <g class="zone" data-c="def" role="button" tabindex="0" aria-expanded="false" aria-label="Defense, space &amp; gov" style="--d:200ms">
       <circle cx="62" cy="370" r="44" fill="#55606B"/>
