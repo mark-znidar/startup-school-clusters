@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Startup School Clusters — meet people with similar interests</title>
+<meta name="description" content="Unofficial attendee meetups on Thrive City Plaza during today's Startup School breaks — pick an interest cluster and walk to its zone.">
+<meta name="theme-color" content="#FDF8F2">
+<meta name="color-scheme" content="light">
+<meta property="og:title" content="Startup School Clusters — meet people with similar interests">
+<meta property="og:description" content="Unofficial attendee meetups on Thrive City Plaza during today's Startup School breaks — pick an interest cluster and walk to its zone.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23FDF8F2'/%3E%3Ccircle cx='32' cy='32' r='16' fill='%23F26522'/%3E%3C/svg%3E">
+<style>
+  :root{
+    --bg:#FDF8F2; --ink:#1F1B16; --accent:#F26522; --cream:#FFF7EF;
+    --muted:#6B6257;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%;height:100%}
+  body{
+    background:var(--bg); color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    height:100dvh; overflow:hidden;
+    display:flex; flex-direction:column;
+    padding:calc(8px + env(safe-area-inset-top)) calc(14px + env(safe-area-inset-right)) calc(6px + env(safe-area-inset-bottom)) calc(14px + env(safe-area-inset-left));
+  }
+
+  header{flex:none;width:100%;max-width:480px;margin:0 auto}
+  .ycbar{position:fixed;top:0;left:0;right:0;height:4px;background:var(--accent);z-index:100}
+  .badge{
+    font-size:9px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+    color:var(--accent);margin-bottom:4px;
+  }
+  .badge::before{
+    content:'';display:inline-block;width:9px;height:9px;border-radius:2.5px;
+    background:var(--accent);margin-right:5px;vertical-align:-1px;
+  }
+  h1{
+    font-size:clamp(15px,4.6vw,20px);font-weight:800;line-height:1.15;
+    letter-spacing:-.02em;margin-bottom:5px;
+  }
+  h1 .arrow{color:var(--accent)}
+  .intro{font-size:10.5px;line-height:1.4;color:var(--ink);margin-bottom:4px}
+  .how{font-size:9.5px;line-height:1.45;color:var(--muted);margin-bottom:6px}
+  .how b{color:var(--accent);font-weight:700}
+
+  .times{display:flex;gap:5px;margin-bottom:3px}
+  .chip{
+    flex:1;text-align:center;border:1px solid rgba(31,27,22,.28);border-radius:9px;
+    padding:4px 2px;min-width:0;transition:opacity .3s ease;
+  }
+  .chip .t{display:block;font-size:9.5px;font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
+  .chip .n{display:block;font-size:8px;font-weight:600;color:var(--muted);white-space:nowrap}
+  .chip.hero{
+    background:var(--accent);border-color:var(--accent);color:var(--cream);
+    box-shadow:0 2px 10px rgba(242,101,34,.35);
+    animation:breathe 3s ease-in-out infinite;
+  }
+  .chip.hero .n{color:var(--cream);opacity:.95}
+  @keyframes breathe{
+    0%,100%{transform:scale(1);box-shadow:0 2px 10px rgba(242,101,34,.35)}
+    50%{transform:scale(1.03);box-shadow:0 3px 14px rgba(242,101,34,.5)}
+  }
+  .chip.past{opacity:.4;animation:none;box-shadow:none;transform:none}
+  .times-note{font-size:9.5px;font-weight:600;color:var(--ink);margin-bottom:4px}
+  .times-note .hl{color:var(--accent)}
+
+  .mapbox{
+    flex:1;min-height:0;position:relative;
+    width:100%;max-width:520px;margin:0 auto;
+    display:flex;align-items:center;justify-content:center;
+  }
+  svg.map{display:block;width:100%;height:100%}
+  .map-caption{flex:none;font-size:9px;color:var(--muted);text-align:center;margin:2px 0 4px}
+
+  .zone{cursor:pointer}
+  .zone circle{transition:stroke .15s ease}
+  .zone:focus{outline:none}
+  .zone:focus-visible circle{stroke:var(--ink);stroke-width:2.5px}
+  .zone[aria-expanded="true"] circle{stroke:var(--ink);stroke-width:2px}
+  .zname{font-weight:700;font-size:10px;text-anchor:middle}
+  .zname.lg{font-size:11px}
+  .zplus{font-weight:600;font-size:10px;text-anchor:middle;opacity:.75}
+  .zc{fill:var(--cream)}
+  .zi{fill:var(--ink)}
+  .furniture text{font-size:9px;fill:var(--muted)}
+  .arena-label{font-size:11px;font-weight:700;letter-spacing:.14em;fill:var(--ink)}
+
+  @media (prefers-reduced-motion: no-preference){
+    .zone{opacity:0;transform:translateY(5px);animation:rise .35s ease forwards;animation-delay:var(--d,0ms)}
+    @keyframes rise{to{opacity:1;transform:translateY(0)}}
+  }
+  @media (prefers-reduced-motion: reduce){
+    .chip.hero{animation:none}
+  }
+
+  .popup{
+    position:absolute;top:4px;left:2px;right:2px;max-height:calc(100% - 8px);z-index:10;
+    border-radius:14px;background:#fff;box-shadow:0 6px 24px rgba(31,27,22,.22);
+    padding:12px;overflow-y:auto;
+    animation:popin .2s ease;
+  }
+  @media (prefers-reduced-motion: reduce){.popup{animation:none}}
+  @keyframes popin{from{opacity:0;transform:translateY(-3px)}to{opacity:1;transform:none}}
+  .popup[hidden]{display:none}
+  .popup h2{
+    font-size:14px;font-weight:700;line-height:1.25;
+    border-left:5px solid var(--zc,var(--accent));
+    padding:4px 30px 4px 9px;margin-bottom:8px;border-radius:3px;
+  }
+  .popup .where{font-size:11px;margin-bottom:8px}
+  .popup .where b{font-weight:600}
+  .pills{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px}
+  .pill{
+    font-size:10px;color:var(--ink);background:var(--pc,rgba(242,101,34,.13));
+    border-radius:999px;padding:3px 8px;
+  }
+  .beacon-btn{
+    display:block;width:100%;border:0;border-radius:10px;
+    background:var(--zc,var(--accent));color:var(--btn-ink,var(--cream));
+    font:inherit;font-size:12.5px;font-weight:700;padding:9px;
+    cursor:pointer;box-shadow:0 2px 8px rgba(31,27,22,.15);
+  }
+  .beacon-btn:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+  .popup-close{
+    position:absolute;top:7px;right:7px;width:28px;height:28px;
+    border:0;border-radius:50%;background:rgba(31,27,22,.07);
+    color:var(--ink);font-size:15px;line-height:1;cursor:pointer;
+  }
+  .popup-close:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+
+  .beacon{
+    position:fixed;inset:0;height:100dvh;z-index:50;
+    display:none;flex-direction:column;align-items:center;justify-content:center;
+    text-align:center;cursor:pointer;
+    padding:calc(20px + env(safe-area-inset-top)) calc(16px + env(safe-area-inset-right)) calc(20px + env(safe-area-inset-bottom)) calc(16px + env(safe-area-inset-left));
+  }
+  .beacon.show{display:flex}
+  @media (prefers-reduced-motion: no-preference){
+    .beacon.show{animation:glow 4s ease-in-out infinite}
+    @keyframes glow{0%,100%{filter:brightness(1)}50%{filter:brightness(1.07)}}
+  }
+  .beacon .bname{
+    font-weight:900;line-height:1.02;letter-spacing:-.02em;
+    font-size:clamp(44px,13vw,110px);overflow-wrap:break-word;max-width:100%;
+  }
+  .beacon .bsub{font-size:18px;font-weight:600;margin-top:14px;opacity:.9}
+  .beacon .bexit{
+    position:absolute;left:0;right:0;bottom:calc(18px + env(safe-area-inset-bottom));
+    font-size:13.5px;opacity:.55;
+  }
+
+  footer{
+    flex:none;width:100%;max-width:480px;margin:0 auto;
+    display:flex;align-items:center;justify-content:space-between;gap:10px;
+  }
+  .fnotes{font-size:8.5px;line-height:1.35;color:var(--muted);min-width:0}
+  .fnotes .made{opacity:.75}
+  .share-btn{
+    flex:none;border:0;border-radius:9px;
+    background:var(--ink);color:var(--cream);
+    font:inherit;font-size:11px;font-weight:700;padding:7px 12px;
+    cursor:pointer;box-shadow:0 2px 8px rgba(31,27,22,.18);
+  }
+  .share-btn:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+
+  .toast{
+    position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom));
+    transform:translateX(-50%);z-index:60;
+    background:var(--ink);color:var(--cream);font-size:13px;font-weight:600;
+    padding:8px 16px;border-radius:999px;opacity:0;pointer-events:none;
+    transition:opacity .25s ease;
+  }
+  .toast.show{opacity:1}
+
+  button::-moz-focus-inner{border:0}
+</style>
+</head>
+<body>
+<div class="ycbar" aria-hidden="true"></div>
+<header>
+  <p class="badge">STARTUP SCHOOL 2026 · DAY 2 · TODAY</p>
+  <h1>Startup School too big? <span class="arrow">→</span> Let's meet people with similar interests.</h1>
+  <p class="intro">During today's breaks, we're splitting the plaza into interest clusters. Pick yours below, walk over, and meet your cofounder, first user, first employee — or just a friend.</p>
+  <p class="how"><b>1</b> Pick your cluster below · <b>2</b> At lunch or any break, walk to its zone on the plaza · <b>3</b> Open with: "What are you building?"</p>
+  <div class="times">
+    <div class="chip" data-end="12:15"><span class="t">11:00–12:15</span><span class="n">Lunch</span></div>
+    <div class="chip" data-end="14:00"><span class="t">1:30–2:00</span><span class="n">Transition 1</span></div>
+    <div class="chip hero" data-end="15:30"><span class="t">3:00–3:30</span><span class="n">★ THE MEETUP</span></div>
+    <div class="chip" data-end="17:15"><span class="t">4:30–5:15</span><span class="n">Transition 3</span></div>
+  </div>
+  <p class="times-note"><span class="hl">★</span> We're all aiming for 3:00 — can only make one? Make it 3:00.</p>
+</header>
+
+<section class="mapbox">
+  <svg class="map" viewBox="0 0 390 560" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Map of Thrive City Plaza with ten interest cluster zones arranged around the plaza. Arena doors are at the top; the plaza entrance is at the bottom-left corner and seating runs along the bottom edge.">
+    <g class="furniture">
+      <rect x="1.5" y="1.5" width="387" height="557" rx="10" fill="none" stroke="rgba(31,27,22,.22)" stroke-width="1.5"/>
+      <path d="M0,0 H390 V56 Q195,86 0,56 Z" fill="#E9E4DC"/>
+      <text class="arena-label" x="195" y="36" text-anchor="middle">ARENA DOORS</text>
+      <rect x="173" y="67" width="44" height="5" rx="2.5" fill="#1F1B16" opacity=".85"/>
+      <path d="M6,514 L36,546" stroke="#B57A3A" stroke-width="5" stroke-linecap="round" fill="none"/>
+      <text x="42" y="557">Plaza entrance</text>
+      <rect x="75" y="538" width="181" height="9" rx="4.5" fill="#EFE2CC"/>
+      <text x="165" y="557" text-anchor="middle">Seating</text>
+    </g>
+
+    <g class="zone" data-c="ai" role="button" tabindex="0" aria-expanded="false" aria-label="AI infra &amp; developer tools" style="--d:0ms">
+      <circle cx="150" cy="150" r="58" fill="#F26522"/>
+      <text class="zname lg zc" x="150" y="146">AI Infra &amp;<tspan x="150" dy="14">Dev Tools</tspan></text>
+      <text class="zplus zc" x="150" y="182">+</text>
+    </g>
+    <g class="zone" data-c="reg" role="button" tabindex="0" aria-expanded="false" aria-label="AI in regulated industries" style="--d:40ms">
+      <circle cx="300" cy="150" r="44" fill="#8B6FC0"/>
+      <text class="zname zc" x="300" y="153">Regulated AI</text>
+      <text class="zplus zc" x="300" y="170">+</text>
+    </g>
+    <g class="zone" data-c="hw" role="button" tabindex="0" aria-expanded="false" aria-label="Hardware &amp; robotics" style="--d:80ms">
+      <circle cx="60" cy="250" r="46" fill="#5A96C8"/>
+      <text class="zname zi" x="60" y="246">Hardware &amp;<tspan x="60" dy="12">Robotics</tspan></text>
+      <text class="zplus zi" x="60" y="276">+</text>
+    </g>
+    <g class="zone" data-c="fin" role="button" tabindex="0" aria-expanded="false" aria-label="Fintech &amp; financial infrastructure" style="--d:120ms">
+      <circle cx="330" cy="260" r="44" fill="#3A5A8C"/>
+      <text class="zname zc" x="330" y="263">Fintech</text>
+      <text class="zplus zc" x="330" y="280">+</text>
+    </g>
+    <g class="zone" data-c="vert" role="button" tabindex="0" aria-expanded="false" aria-label="Vertical AI for unsexy industries" style="--d:160ms">
+      <circle cx="195" cy="290" r="46" fill="#E0A32E"/>
+      <text class="zname zi" x="195" y="293">Unsexy AI</text>
+      <text class="zplus zi" x="195" y="310">+</text>
+    </g>
+    <g class="zone" data-c="def" role="button" tabindex="0" aria-expanded="false" aria-label="Defense, space &amp; gov" style="--d:200ms">
+      <circle cx="62" cy="370" r="44" fill="#55606B"/>
+      <text class="zname zc" x="62" y="366">Defense &amp;<tspan x="62" dy="12">Space</tspan></text>
+      <text class="zplus zc" x="62" y="396">+</text>
+    </g>
+    <g class="zone" data-c="clim" role="button" tabindex="0" aria-expanded="false" aria-label="Climate, energy &amp; industrial" style="--d:240ms">
+      <circle cx="195" cy="415" r="46" fill="#71A63F"/>
+      <text class="zname zi" x="195" y="411">Climate &amp;<tspan x="195" dy="12">Energy</tspan></text>
+      <text class="zplus zi" x="195" y="441">+</text>
+    </g>
+    <g class="zone" data-c="mkt" role="button" tabindex="0" aria-expanded="false" aria-label="Marketplaces &amp; commerce" style="--d:280ms">
+      <circle cx="330" cy="380" r="44" fill="#B05285"/>
+      <text class="zname zc" x="330" y="383">Marketplaces</text>
+      <text class="zplus zc" x="330" y="400">+</text>
+    </g>
+    <g class="zone" data-c="cons" role="button" tabindex="0" aria-expanded="false" aria-label="Consumer apps &amp; creator tools" style="--d:320ms">
+      <circle cx="75" cy="478" r="42" fill="#DE6A8A"/>
+      <text class="zname zi" x="75" y="481">Consumer</text>
+      <text class="zplus zi" x="75" y="498">+</text>
+    </g>
+    <g class="zone" data-c="bio" role="button" tabindex="0" aria-expanded="false" aria-label="Bio, health &amp; diagnostics" style="--d:360ms">
+      <circle cx="272" cy="482" r="48" fill="#3FA08E"/>
+      <text class="zname lg zc" x="272" y="485">Bio &amp; Health</text>
+      <text class="zplus zc" x="272" y="503">+</text>
+    </g>
+  </svg>
+
+  <section class="popup" id="popup" hidden role="dialog" aria-modal="false" aria-labelledby="popup-title">
+    <button class="popup-close" id="popup-close" aria-label="Close">×</button>
+    <h2 id="popup-title"></h2>
+    <p class="where"><b>Where on the plaza:</b> <span id="popup-hint"></span></p>
+    <div class="pills" id="popup-pills"></div>
+    <button class="beacon-btn" id="beacon-btn">Turn on beacon</button>
+  </section>
+</section>
+<p class="map-caption">Facing the arena doors? The map points the same way.</p>
+
+<footer>
+  <p class="fnotes">Not official — just founders organizing founders. Share it forward.<br><span class="made">Made at Startup School 2026</span></p>
+  <button class="share-btn" id="share-btn">Share this page</button>
+</footer>
+
+<div class="beacon" id="beacon" role="dialog" aria-modal="true" aria-label="Beacon">
+  <div class="bname" id="beacon-name"></div>
+  <div class="bsub">cluster meets here</div>
+  <div class="bexit">Tap anywhere to exit</div>
+</div>
+
+<div class="toast" id="toast" role="status">Link copied</div>
+
+<script>
+(function(){
+  'use strict';
+  var CREAM = '#FFF7EF', INK = '#1F1B16';
+  var C = {
+    ai:   {name:'AI Infra & Dev Tools', title:'AI infra & developer tools', color:'#F26522', text:CREAM,
+           hint:'Front and center — the big zone right at the arena doors.',
+           subs:['agents & orchestration','evals & observability','inference & serving','data & retrieval','model customization','coding tools','safety & guardrails']},
+    vert: {name:'Unsexy AI', title:'Vertical AI for unsexy industries', color:'#E0A32E', text:INK,
+           hint:'Dead center of the plaza.',
+           subs:['home & field services','construction & real estate','transport & fleet','professional services & back-office','food & retail operations','agriculture']},
+    reg:  {name:'Regulated AI', title:'AI in regulated industries', color:'#8B6FC0', text:CREAM,
+           hint:'Front-right, at the arena doors.',
+           subs:['clinical & care operations','legal & contracts','insurance','banking & compliance','pharma & life sciences']},
+    cons: {name:'Consumer', title:'Consumer apps & creator tools', color:'#DE6A8A', text:INK,
+           hint:'Back-left corner, by the plaza entrance.',
+           subs:['social & community','dating','gaming & entertainment','content creation tools','personal productivity','health & wellness','learning']},
+    hw:   {name:'Hardware & Robotics', title:'Hardware & robotics', color:'#5A96C8', text:INK,
+           hint:'Mid-plaza, far left.',
+           subs:['humanoids & general-purpose robots','industrial & warehouse automation','drones & autonomous vehicles','consumer devices & wearables','sensors & perception','chips & compute']},
+    bio:  {name:'Bio & Health', title:'Bio, health & diagnostics', color:'#3FA08E', text:CREAM,
+           hint:'Along the back edge, by the seating.',
+           subs:['autonomous labs & lab automation','therapeutics & drug discovery','synthetic biology & biomanufacturing','diagnostics & genomics','medical devices & imaging','clinical trials & research tooling','care delivery']},
+    clim: {name:'Climate & Energy', title:'Climate, energy & industrial', color:'#71A63F', text:INK,
+           hint:'Back-center of the plaza.',
+           subs:['generation (solar, wind, nuclear, geothermal)','storage & batteries','grid & electrification','carbon & emissions','industrial decarbonization','mining & materials']},
+    fin:  {name:'Fintech', title:'Fintech & financial infrastructure', color:'#3A5A8C', text:CREAM,
+           hint:'Mid-plaza, far right.',
+           subs:['payments','lending & credit','banking infrastructure','crypto & stablecoins','wealth & investing','risk & compliance','business finance ops']},
+    mkt:  {name:'Marketplaces', title:'Marketplaces & commerce', color:'#B05285', text:CREAM,
+           hint:'Back-right of the plaza.',
+           subs:['B2B marketplaces','services marketplaces','logistics & delivery','e-commerce infrastructure','consumer brands & retail','supply chain & procurement']},
+    def:  {name:'Defense & Space', title:'Defense, space & gov', color:'#55606B', text:CREAM,
+           hint:'Back-left, between Hardware and Consumer.',
+           subs:['autonomy & unmanned systems','sensing & ISR','defense manufacturing','satellites & space infrastructure','launch','govtech & public sector']}
+  };
+
+  function hexToRgba(hex, a){
+    var n = parseInt(hex.slice(1), 16);
+    return 'rgba(' + (n>>16) + ',' + ((n>>8)&255) + ',' + (n&255) + ',' + a + ')';
+  }
+
+  // ---- Time-aware dimming (hardcoded to July 26, 2026) ----
+  function applyTimes(now){
+    var rows = document.querySelectorAll('.chip[data-end]');
+    for (var i = 0; i < rows.length; i++){
+      var hm = rows[i].getAttribute('data-end').split(':');
+      var end = new Date(2026, 6, 26, +hm[0], +hm[1]);
+      rows[i].classList.toggle('past', now > end);
+    }
+  }
+  applyTimes(new Date());
+  setInterval(function(){ applyTimes(new Date()); }, 60000);
+  window.applyTimes = applyTimes; // manual clock override for testing
+
+  // ---- Cluster popup over the plaza ----
+  var popup = document.getElementById('popup');
+  var popupTitle = document.getElementById('popup-title');
+  var popupHint = document.getElementById('popup-hint');
+  var popupPills = document.getElementById('popup-pills');
+  var popupClose = document.getElementById('popup-close');
+  var beaconBtn = document.getElementById('beacon-btn');
+  var zones = document.querySelectorAll('.zone');
+  var openKey = null;
+
+  function zoneEl(key){
+    for (var i = 0; i < zones.length; i++)
+      if (zones[i].getAttribute('data-c') === key) return zones[i];
+    return null;
+  }
+  function closePopup(){
+    if (openKey === null) return;
+    var z = zoneEl(openKey);
+    z.setAttribute('aria-expanded', 'false');
+    z.querySelector('.zplus').textContent = '+';
+    openKey = null;
+    popup.hidden = true;
+    z.focus({preventScroll: true});
+  }
+  function openPopup(key){
+    var wasOpen = openKey;
+    closePopup();
+    if (wasOpen === key) return; // second tap on the same zone closes it
+    var c = C[key];
+    popupTitle.textContent = c.title;
+    popupTitle.style.setProperty('--zc', c.color);
+    popupTitle.style.background = hexToRgba(c.color, .08);
+    popupHint.textContent = c.hint;
+    popupPills.innerHTML = '';
+    for (var i = 0; i < c.subs.length; i++){
+      var p = document.createElement('span');
+      p.className = 'pill';
+      p.style.background = hexToRgba(c.color, .13);
+      p.textContent = c.subs[i];
+      popupPills.appendChild(p);
+    }
+    beaconBtn.style.setProperty('--zc', c.color);
+    beaconBtn.style.color = c.text;
+    popup.hidden = false;
+    var z = zoneEl(key);
+    z.setAttribute('aria-expanded', 'true');
+    z.querySelector('.zplus').textContent = '–';
+    openKey = key;
+    popupClose.focus({preventScroll: true});
+  }
+  for (var i = 0; i < zones.length; i++){
+    (function(z){
+      var key = z.getAttribute('data-c');
+      z.addEventListener('click', function(){ openPopup(key); });
+      z.addEventListener('keydown', function(e){
+        if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); openPopup(key); }
+      });
+    })(zones[i]);
+  }
+  popupClose.addEventListener('click', closePopup);
+
+  // ---- Beacon mode ----
+  var beacon = document.getElementById('beacon');
+  var beaconName = document.getElementById('beacon-name');
+  var beaconOpen = false;
+  var wakeLock = null;
+  function acquireLock(){
+    try {
+      if (navigator.wakeLock && navigator.wakeLock.request){
+        navigator.wakeLock.request('screen').then(
+          function(l){ wakeLock = l; },
+          function(){}
+        );
+      }
+    } catch(e){}
+  }
+  function releaseLock(){
+    try { if (wakeLock) wakeLock.release(); } catch(e){}
+    wakeLock = null;
+  }
+  document.addEventListener('visibilitychange', function(){
+    if (document.visibilityState === 'visible' && beaconOpen) acquireLock();
+  });
+  beaconBtn.addEventListener('click', function(){
+    var c = C[openKey];
+    if (!c) return;
+    beacon.style.background = c.color;
+    beacon.style.color = c.text;
+    beaconName.textContent = c.name;
+    beacon.classList.add('show');
+    beaconOpen = true;
+    acquireLock();
+  });
+  function closeBeacon(){
+    beacon.classList.remove('show');
+    beaconOpen = false;
+    releaseLock();
+  }
+  beacon.addEventListener('click', closeBeacon);
+
+  document.addEventListener('keydown', function(e){
+    if (e.key !== 'Escape') return;
+    if (beaconOpen) closeBeacon();
+    else closePopup();
+  });
+
+  // ---- Share ----
+  var toast = document.getElementById('toast');
+  var toastTimer = null;
+  function showToast(){
+    toast.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function(){ toast.classList.remove('show'); }, 2000);
+  }
+  function copyLink(){
+    var url = location.href;
+    function legacyCopy(){
+      var ta = document.createElement('textarea');
+      ta.value = url;
+      ta.setAttribute('readonly', '');
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand('copy'); } catch(e){}
+      document.body.removeChild(ta);
+      showToast();
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(url).then(showToast, legacyCopy);
+    } else {
+      legacyCopy();
+    }
+  }
+  document.getElementById('share-btn').addEventListener('click', function(){
+    if (navigator.share){
+      navigator.share({title: document.title, url: location.href}).catch(function(){});
+    } else {
+      copyLink();
+    }
+  });
+})();
+</script>
+</body>
+</html>
