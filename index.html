@@ -85,6 +85,11 @@
   .zi{fill:var(--ink)}
   .furniture text{font-size:9px;fill:var(--muted)}
   .arena-label{font-size:11px;font-weight:700;letter-spacing:.14em;fill:var(--ink)}
+  .boom text{font-size:15px;font-weight:900;letter-spacing:.06em;fill:#fff;text-anchor:middle}
+  @media (prefers-reduced-motion: no-preference){
+    .boom{animation:boomblink 1.2s ease-in-out .8s 3}
+    @keyframes boomblink{0%,100%{opacity:1}50%{opacity:.15}}
+  }
 
   @media (prefers-reduced-motion: no-preference){
     .zone{opacity:0;transform:translateY(5px);animation:rise .35s ease forwards;animation-delay:var(--d,0ms)}
@@ -201,8 +206,13 @@
       <rect x="173" y="67" width="44" height="5" rx="2.5" fill="#1F1B16" opacity=".85"/>
       <path d="M6,514 L36,546" stroke="#B57A3A" stroke-width="5" stroke-linecap="round" fill="none"/>
       <text x="42" y="557">Plaza entrance</text>
-      <rect x="75" y="538" width="181" height="9" rx="4.5" fill="#EFE2CC"/>
-      <text x="165" y="557" text-anchor="middle">Seating</text>
+      <rect x="70" y="538" width="201" height="9" rx="4.5" fill="#EFE2CC"/>
+      <text x="170" y="557" text-anchor="middle">Seating</text>
+    </g>
+
+    <g class="boom" aria-hidden="true">
+      <rect x="207" y="393" width="80" height="58" rx="10" fill="#111"/>
+      <text x="247" y="427">BOOM</text>
     </g>
 
     <g class="zone" data-c="ai" role="button" tabindex="0" aria-expanded="false" aria-label="AI infra &amp; developer tools" style="--d:0ms">
@@ -236,24 +246,24 @@
       <text class="zplus zc" x="62" y="396">+</text>
     </g>
     <g class="zone" data-c="clim" role="button" tabindex="0" aria-expanded="false" aria-label="Climate, energy &amp; industrial" style="--d:240ms">
-      <circle cx="195" cy="415" r="46" fill="#71A63F"/>
-      <text class="zname zi" x="195" y="411">Climate &amp;<tspan x="195" dy="12">Energy</tspan></text>
-      <text class="zplus zi" x="195" y="441">+</text>
+      <circle cx="150" cy="428" r="44" fill="#71A63F"/>
+      <text class="zname zi" x="150" y="424">Climate &amp;<tspan x="150" dy="12">Energy</tspan></text>
+      <text class="zplus zi" x="150" y="454">+</text>
     </g>
     <g class="zone" data-c="mkt" role="button" tabindex="0" aria-expanded="false" aria-label="Marketplaces &amp; commerce" style="--d:280ms">
-      <circle cx="330" cy="380" r="44" fill="#B05285"/>
-      <text class="zname zc" x="330" y="383">Marketplaces</text>
-      <text class="zplus zc" x="330" y="400">+</text>
+      <circle cx="330" cy="374" r="44" fill="#B05285"/>
+      <text class="zname zc" x="330" y="377">Marketplaces</text>
+      <text class="zplus zc" x="330" y="394">+</text>
     </g>
     <g class="zone" data-c="cons" role="button" tabindex="0" aria-expanded="false" aria-label="Consumer apps &amp; creator tools" style="--d:320ms">
-      <circle cx="75" cy="478" r="42" fill="#DE6A8A"/>
-      <text class="zname zi" x="75" y="481">Consumer</text>
-      <text class="zplus zi" x="75" y="498">+</text>
+      <circle cx="70" cy="487" r="42" fill="#DE6A8A"/>
+      <text class="zname zi" x="70" y="490">Consumer</text>
+      <text class="zplus zi" x="70" y="507">+</text>
     </g>
     <g class="zone" data-c="bio" role="button" tabindex="0" aria-expanded="false" aria-label="Bio, health &amp; diagnostics" style="--d:360ms">
-      <circle cx="272" cy="482" r="48" fill="#3FA08E"/>
-      <text class="zname lg zc" x="272" y="485">Bio &amp; Health</text>
-      <text class="zplus zc" x="272" y="503">+</text>
+      <circle cx="285" cy="494" r="41" fill="#3FA08E"/>
+      <text class="zname zc" x="285" y="497">Bio &amp; Health</text>
+      <text class="zplus zc" x="285" y="514">+</text>
     </g>
   </svg>
 
